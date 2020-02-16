@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - nextcloud-docker
+    - haghighi_ahmad.nextcloud_docker
