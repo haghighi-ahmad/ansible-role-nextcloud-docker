@@ -1,0 +1,49 @@
+server {
+    listen       443 ssl;
+    server_name  {{ nextcloud_office_domain }};
+
+    ssl_certificate /etc/keys/{{ nextcloud_office_domain }}/fullchain1.pem;
+    ssl_certificate_key /etc/keys/{{ nextcloud_office_domain }}/privkey1.pem;
+
+    # static files
+    location ^~ /loleaflet {
+        proxy_pass https://localhost:{{ nextcloud_office_port }};
+        proxy_set_header Host $http_host;
+    }
+
+    # WOPI discovery URL
+    location ^~ /hosting/discovery {
+        proxy_pass https://localhost:{{ nextcloud_office_port }};
+        proxy_set_header Host $http_host;
+    }
+
+    # Capabilities
+    location ^~ /hosting/capabilities {
+        proxy_pass https://localhost:{{ nextcloud_office_port }};
+        proxy_set_header Host $http_host;
+    }
+
+    # main websocket
+    location ~ ^/lool/(.*)/ws$ {
+        proxy_pass https://localhost:{{ nextcloud_office_port }};
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $http_host;
+        proxy_read_timeout 36000s;
+    }
+
+    # download, presentation and image upload
+    location ~ ^/lool {
+        proxy_pass https://localhost:{{ nextcloud_office_port }};
+        proxy_set_header Host $http_host;
+    }
+
+    # Admin Console websocket
+    location ^~ /lool/adminws {
+        proxy_pass https://localhost:{{ nextcloud_office_port }};
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $http_host;
+        proxy_read_timeout 36000s;
+    }
+}

@@ -1,0 +1,5 @@
+# main.yml
+---
+- import_tasks: check_vars.yml
+- import_tasks: nginx.yml
+- import_tasks: nextcloud.yml

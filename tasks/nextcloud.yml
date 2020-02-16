@@ -1,0 +1,43 @@
+# nextcloud.yml
+---
+- name: Create "{{ nextcloud_docker_compose_dir }}" directory
+  file:
+    path: "{{ nextcloud_docker_compose_dir }}"
+    state: directory
+
+- name: Create docker-compose configuration
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ nextcloud_docker_compose_dir }}/{{ item }}"
+    mode: 0600
+  with_items:
+    - docker-compose.yml
+  register: nextcloud_compose_config
+
+- name: Create nextcloud nginx configuration
+  template:
+    src: "nextcloud-nginx.j2"
+    dest: "/etc/nginx/sites-enabled/nextcloud"
+    mode: 0600
+  notify:
+    - Reload Nginx
+
+- name: Create Collabora Office nginx configuration
+  template:
+    src: "code.j2"
+    dest: "/etc/nginx/sites-enabled/code"
+    mode: 0600
+  notify:
+    - Reload Nginx
+
+- name: Start the containers
+  docker_compose:
+    project_src: "{{ nextcloud_docker_compose_dir }}"
+    state: present
+
+- name: Restart the containers
+  docker_compose:
+    project_src: "{{ nextcloud_docker_compose_dir }}"
+    restarted: "{{ nextcloud_compose_config is changed }}"
+  register: nextcloud_compose_start
+

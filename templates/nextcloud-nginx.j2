@@ -1,0 +1,48 @@
+server {
+
+    server_name {{ nextcloud_domain }};
+    root /var/www/ncloud;
+
+    index index.html;
+    location / {
+        proxy_pass http://localhost:{{ nextcloud_app_port }}/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+        client_max_body_size 0;
+
+        access_log /var/log/nginx/nextcloud.access.log;
+        error_log /var/log/nginx/nextcloud.error.log;
+     }
+
+    location /.well-known/carddav {
+      return 301 $scheme://$host/remote.php/dav;
+     }
+
+    location /.well-known/caldav {
+      return 301 $scheme://$host/remote.php/dav;
+     }
+
+    listen 443 ssl; # managed by Certbot
+{% if nextcloud_nginx_ssl is sameas true %}
+    ssl_certificate /etc/keys/{{ nextcloud_domain }}/fullchain1.pem; # managed by Certbot
+    ssl_certificate_key /etc/keys/{{ nextcloud_domain }}/privkey1.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+{% endif %}
+
+}
+server {
+    if ($host = {{ nextcloud_domain }}) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80;
+
+    server_name {{ nextcloud_domain }};
+    return 404; # managed by Certbot
+
+}

@@ -1,0 +1,6 @@
+---
+# handlers file for nextcloud-docker:
+- name: Reload Nginx
+  service:
+      name: nginx
+      state: reloaded

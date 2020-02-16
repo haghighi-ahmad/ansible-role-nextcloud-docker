@@ -1,0 +1,79 @@
+#jinja2: lstrip_blocks: True
+version: '3'
+
+services:
+  db:
+    image: {{ nextcloud_db_docker_image }}
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+    {% if nextcloud_db_use_volume is sameas true %}
+      - {{ nextcloud_db_volume }}:/var/lib/mysql
+    {% else %}
+      - {{ nextcloud_db_data_dir }}:/var/lib/mysql
+    {% endif %}
+    environment:
+      MYSQL_PASSWORD: {{ nextcloud_mysql_password }}
+      MYSQL_ROOT_PASSWORD: {{ nextcloud_mysql_root_password }}
+      MYSQL_DATABASE: {{ nextcloud_db_dnname }}
+      MYSQL_USER: {{ nextcloud_db_user }}
+
+  redis:
+    image: redis:alpine
+    restart: always
+
+  app:
+    image: {{ nextcloud_app_docker_image  }}
+    restart: always
+    ports:
+      - {{ nextcloud_app_port }}:80
+    volumes:
+    {% if nextcloud_app_use_volume is sameas true %}
+      - {{ nextcloud_app_volume }}:/var/www/html
+    {% else %}
+      - {{ nextcloud_app_data_dir }}:/var/www/html
+    {% endif %}
+    environment:
+      MYSQL_HOST: db
+      REDIS_HOST: redis
+    depends_on:
+      - db
+      - redis
+
+  cron:
+    image: {{ nextcloud_cron_docker_image }}
+    restart: always
+    volumes:
+    {% if nextcloud_app_use_volume is sameas true %}
+      - {{ nextcloud_app_volume }}:/var/www/html
+    {% else %}
+      - {{ nextcloud_app_data_dir }}:/var/www/html
+    {% endif %}
+    entrypoint: /cron.sh
+    depends_on:
+      - db
+      - redis
+
+{% if nextcloud_office is sameas true %}
+  code:
+    image: collabora/code
+    restart: always
+    ports:
+      - {{ nextcloud_office_port }}:9980
+    cap_add:
+      - MKNOD
+    environment:
+#      extra_params="--o:ssl.enable=false --o:ssl.termination=true"
+      domain: '{{ nextcloud_office_white_domains }}'
+      username: "{{ nextcloud_office_username }}"
+      password: "{{ nextcloud_office_password }}"
+{% endif %}
+   
+volumes:
+{% if nextcloud_db_use_volume is sameas true %}
+  {{ nextcloud_db_volume }}:
+{% endif %}
+{% if nextcloud_app_use_volume is sameas true %}
+  {{ nextcloud_app_volume }}:
+{% endif %}
+

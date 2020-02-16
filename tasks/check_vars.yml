@@ -1,0 +1,22 @@
+---
+# check_vars.yml
+
+- name: nextcloud_domain should be defined
+  assert:
+    that:
+      - nextcloud_domain is defined and nextcloud_domain != ''
+    msg: "Set the value of 'nextcloud_domain'."
+
+- name: nextcloud_office_white_domains should be defined
+  assert:
+    that:
+      - nextcloud_office_white_domains is defined and nextcloud_office_white_domains != ''
+    msg: "Set the value of 'nextcloud_office_white_domains', it is mandatory for Collabora office installation."
+  when: nextcloud_office is sameas true
+
+- name: nextcloud_office_domain should be defined
+  assert:
+    that:
+      - nextcloud_office_domain is defined and nextcloud_office_domain != ''
+    msg: "Set the value of 'nextcloud_office_domain', it is mandatory for Collabora office installation."
+  when: nextcloud_office is sameas true
