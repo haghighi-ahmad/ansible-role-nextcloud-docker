@@ -1,4 +1,6 @@
+---
 galaxy_info:
+  role_name: nextcloud_docker
   author: Ahmad Haghighi
   description: Install Nextcloud and Collabora office on Docker
 

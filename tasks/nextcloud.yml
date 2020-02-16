@@ -40,4 +40,3 @@
     project_src: "{{ nextcloud_docker_compose_dir }}"
     restarted: "{{ nextcloud_compose_config is changed }}"
   register: nextcloud_compose_start
-
