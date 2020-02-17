@@ -1,0 +1,7 @@
+# docker.yml
+---
+- name: Ensure Docker daemon is started and enabled to start at boot.
+  service:
+    name: docker
+    state: started
+    enabled: true
