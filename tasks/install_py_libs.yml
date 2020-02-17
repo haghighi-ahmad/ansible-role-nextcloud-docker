@@ -1,0 +1,19 @@
+# install_py_packages.py
+# install python packages
+---
+- name: Install Docker python library (Python < 2.7)
+  pip:
+    name: docker-py
+    state: latest
+  when: ansible_python_version is version_compare('2.7', '<')
+
+- name: Install Docker python library (Python >= 2.7)
+  pip:
+    name: docker
+    state: latest
+  when: ansible_python_version is version_compare('2.7', '>=')
+
+- name: Install Docker Compose python library
+  pip:
+    name: docker-compose
+    state: latest
