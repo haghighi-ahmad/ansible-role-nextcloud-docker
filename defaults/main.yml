@@ -2,20 +2,23 @@
 # defaults file for nextcloud-docker
 
 # Use http/https/socks proxy
-use_proxy_env: false
+proxy_env:
+  http_proxy: ""
+  https_proxy: ""
 
-nextcloud_docker_compose_dir: "/opt/nextcloud-docker"
+# Moved to vars/main.yml
+# nextcloud_docker_compose_dir: "/opt/nextcloud-docker"
 
 # app 
 nextcloud_app_docker_version: "apache"
 nextcloud_app_docker_image: "nextcloud:{{nextcloud_app_docker_version}}"
-nextcloud_app_port: 8283
+# nextcloud_app_port: 8283 # Moved to vars/main.yml
 nextcloud_app_data_dir: "{{ nextcloud_docker_compose_dir }}/volumes/app"
 nextcloud_app_use_volume: true
 nextcloud_app_volume: "nextcloud"
 
 # SSL
-nextcloud_nginx_ssl: true
+#nextcloud_nginx_ssl: true # Moved to vars/main.yml
 
 # cron
 nextcloud_cron_docker_version: "apache"
@@ -27,13 +30,10 @@ nextcloud_db_docker_image: "mariadb:{{nextcloud_db_docker_version}}"
 nextcloud_db_data_dir: "{{ nextcloud_docker_compose_dir }}/volumes/db"
 nextcloud_db_use_volume: true
 nextcloud_db_volume: "db"
-nextcloud_mysql_password: "somepass"
-nextcloud_mysql_root_password: "somepass2"
-nextcloud_db_dnname: "nextcloud"
-nextcloud_db_user: "nextcloud"
+
 
 # Collabora office 
-nextcloud_office: false
-nextcloud_office_port: 9980
+# nextcloud_office: false # Moved to vars/main.yml
+# nextcloud_office_port: 9980 # Moved to vars/main.yml
 nextcloud_office_username: "admin"
 nextcloud_office_password: "ODlmM2Y4OTA0NTM4NGYxNmJjNGNiNjI3ODE0MjgxZTcgIC0K"

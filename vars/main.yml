@@ -1,2 +1,19 @@
 ---
 # vars file for nextcloud-docker
+
+nextcloud_docker_compose_dir: "/opt/nextcloud-docker"
+
+nextcloud_app_port: 8181
+
+# Database
+nextcloud_mysql_password: "somepass"
+nextcloud_mysql_root_password: "somepass2"
+nextcloud_db_dnname: "nextcloud"
+nextcloud_db_user: "nextcloud"
+
+# Collabora Office
+nextcloud_office: false
+nextcloud_office_port: 9980
+
+# SSL
+nextcloud_nginx_ssl: true

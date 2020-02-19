@@ -16,4 +16,4 @@
     state: latest
     extra_args: " --no-cache-dir "
     executable: pip3
-  environment: "{{ proxy_env if ( use_proxy_env is sameas true  ) else [] }}"
+  environment: "{{ proxy_env }}"
