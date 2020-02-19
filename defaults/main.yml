@@ -1,6 +1,9 @@
 ---
 # defaults file for nextcloud-docker
 
+# Use http/https/socks proxy
+use_proxy_env: false
+
 nextcloud_docker_compose_dir: "/opt/nextcloud-docker"
 
 # app 

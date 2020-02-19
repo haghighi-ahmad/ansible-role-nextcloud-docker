@@ -1,19 +1,19 @@
 # install_py_packages.py
 # install python packages
 ---
-- name: Install Docker python library (Python < 2.7)
-  pip:
-    name: docker-py
-    state: latest
-  when: ansible_python_version is version_compare('2.7', '<')
-
-- name: Install Docker python library (Python >= 2.7)
+- name: Install Docker python library
   pip:
     name: docker
     state: latest
+    executable: pip3
   when: ansible_python_version is version_compare('2.7', '>=')
 
 - name: Install Docker Compose python library
   pip:
-    name: docker-compose
+    name: 
+    - zipp
+    - docker-compose
     state: latest
+    extra_args: " --no-cache-dir "
+    executable: pip3
+  environment: "{{ proxy_env if ( use_proxy_env is sameas true  ) else [] }}"
