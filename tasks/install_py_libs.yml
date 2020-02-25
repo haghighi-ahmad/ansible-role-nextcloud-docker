@@ -1,18 +1,12 @@
-# install_py_packages.py
 # install python packages
 ---
-- name: Install Docker python library
+- name: Install Docker Compose required python library
   pip:
-    name: docker
-    state: latest
-    executable: pip3
-  when: ansible_python_version is version_compare('2.7', '>=')
-
-- name: Install Docker Compose python library
-  pip:
-    name: 
-    - zipp
-    - docker-compose
+    name:
+      - docker
+      - docker-pycreds
+      - zipp
+      - docker-compose
     state: latest
     extra_args: " --no-cache-dir "
     executable: pip3
