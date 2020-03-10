@@ -68,12 +68,20 @@ services:
       username: "{{ nextcloud_office_username }}"
       password: "{{ nextcloud_office_password }}"
 {% endif %}
-   
+
+
+{% if nextcloud_db_use_volume is sameas true or nextcloud_app_use_volume is sameas true %}
 volumes:
 {% if nextcloud_db_use_volume is sameas true %}
   {{ nextcloud_db_volume }}:
+  {% if nextcloud_db_volume_is_external is sameas true %}
+    external: true
+  {% endif %}
 {% endif %}
 {% if nextcloud_app_use_volume is sameas true %}
   {{ nextcloud_app_volume }}:
+  {% if nextcloud_app_volume_is_external is sameas true %}
+    external: true
+  {% endif %}
 {% endif %}
-
+{% endif %}

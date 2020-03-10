@@ -15,6 +15,7 @@ nextcloud_app_docker_image: "nextcloud:{{nextcloud_app_docker_version}}"
 # nextcloud_app_port: 8283 # Moved to vars/main.yml
 nextcloud_app_data_dir: "{{ nextcloud_docker_compose_dir }}/volumes/app"
 nextcloud_app_use_volume: true
+nextcloud_app_volume_is_external: false
 nextcloud_app_volume: "nextcloud"
 
 # SSL
@@ -29,6 +30,7 @@ nextcloud_db_docker_version: "latest"
 nextcloud_db_docker_image: "mariadb:{{nextcloud_db_docker_version}}"
 nextcloud_db_data_dir: "{{ nextcloud_docker_compose_dir }}/volumes/db"
 nextcloud_db_use_volume: true
+nextcloud_db_volume_is_external: false
 nextcloud_db_volume: "db"
 
 
